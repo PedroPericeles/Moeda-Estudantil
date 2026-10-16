@@ -1,3 +1,14 @@
+# Sistema de Moeda Estudantil
+
+Trabalho desenvolvido para a disciplina de Projeto de Software (Laboratório 3) do curso de Engenharia de Software da PUC Minas.
+
+## 👥 Integrantes do Grupo
+
+* **Pedro Augusto Periceles**
+* **Santhiago Takaesu**
+
+**Professora:** Milena Menezes Adão
+
 ## 📖 Histórias de Usuário
 
 Abaixo estão descritas as Histórias de Usuário mapeadas para o desenvolvimento do **Sistema de Moeda Estudantil**, estruturadas para orientar o desenvolvimento e validar as entregas.
