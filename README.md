@@ -152,6 +152,31 @@ Os diagramas produzidos no projeto estão disponíveis em [`Diagramas/`](./Diagr
 - [Diagrama de classes](./Diagramas/Diagrama%20de%20classe.png)
 - [Diagrama de componentes](./Diagramas/Diagrama%20de%20componentes.png)
 - [Modelo entidade-relacionamento](./Diagramas/DiagramaER.png)
+- [Modelo ER detalhado em Mermaid](./Diagramas/ModeloER.md)
+
+## Implementação inicial (Lab 4.2)
+
+O projeto usa Java 21, Spring Boot, Spring MVC e Spring Data JPA com banco H2 em arquivo para persistir os dados. A aplicação segue MVC: as entidades representam o modelo, os repositórios JPA acessam o banco, os serviços concentram as operações e os controladores expõem a API HTTP; a interface web é servida pela aplicação.
+
+Nesta etapa estão implementados:
+
+- CRUD de alunos e empresas parceiras (criar, listar, buscar por ID, editar e excluir).
+- Lista de instituições pré-cadastradas para selecionar no cadastro do aluno (o banco de demonstração inclui PUC Minas).
+- Validação de campos obrigatórios, formato básico de email, quantidade de dígitos de CPF/CNPJ e tamanho mínimo de senha.
+- Restrições no banco para impedir duplicidade de CPF, RG, CNPJ, email e login.
+- Senhas armazenadas com hash BCrypt e DTOs que não retornam a senha nem o hash pela API.
+- Interface web conectada ao back-end, acessível em `http://localhost:8080`.
+
+### Como executar
+
+É necessário ter Java 21 e Maven instalados. Na raiz do repositório, execute:
+
+```bash
+mvn package
+java -jar target/moeda-estudantil-1.0.0.jar
+```
+
+O Spring Boot cria o arquivo `data/moeda-estudantil.mv.db` e as tabelas automaticamente. A aplicação disponibiliza o console H2 em `/h2-console` durante o desenvolvimento. Para mudar a URL JDBC, configure `SPRING_DATASOURCE_URL`; para mudar a porta HTTP, configure `PORT` (padrão `8080`). As tabelas de moedas, transações, vantagens e resgates permanecem para etapas posteriores.
 
 ## Processo de desenvolvimento
 

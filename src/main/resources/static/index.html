@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Moeda Estudantil | Cadastros</title>
+    <style>
+        :root { color-scheme: light; font-family: "Segoe UI", Arial, sans-serif; color: #17233b; background: #f3f6fb; }
+        * { box-sizing: border-box; }
+        body { margin: 0; }
+        header { padding: 24px max(24px, calc((100% - 1120px) / 2)); background: #173b70; color: white; }
+        header h1 { margin: 0 0 6px; font-size: 1.55rem; }
+        header p { margin: 0; color: #d8e5f8; }
+        main { max-width: 1120px; margin: 28px auto; padding: 0 20px 40px; }
+        nav { display: flex; gap: 10px; margin-bottom: 20px; }
+        nav button, .primary { border: 0; border-radius: 6px; padding: 10px 16px; background: #1d5ca8; color: white; font-weight: 600; cursor: pointer; }
+        nav button[aria-selected="false"] { background: #dce6f3; color: #173b70; }
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .card { margin-bottom: 20px; padding: 20px; border: 1px solid #dce3ed; border-radius: 10px; background: white; box-shadow: 0 2px 8px #17233b0b; }
+        h2 { margin: 0 0 16px; font-size: 1.2rem; }
+        form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: end; }
+        label { display: grid; gap: 5px; font-size: .9rem; font-weight: 600; }
+        input, select { width: 100%; min-height: 40px; border: 1px solid #b9c5d5; border-radius: 5px; padding: 8px 10px; font: inherit; background: white; }
+        .form-actions { display: flex; gap: 10px; }
+        .secondary { border: 1px solid #bac7d8; border-radius: 6px; padding: 9px 14px; background: white; color: #173b70; cursor: pointer; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 10px 9px; border-bottom: 1px solid #e5eaf1; vertical-align: middle; }
+        th { color: #44536a; font-size: .85rem; }
+        td { font-size: .92rem; }
+        .actions { display: flex; gap: 7px; }
+        .actions button { border: 1px solid #bac7d8; border-radius: 5px; padding: 6px 9px; background: white; cursor: pointer; }
+        .actions .delete { color: #a22626; }
+        .message { min-height: 22px; margin: 0 0 12px; color: #a22626; }
+        .message.success { color: #14633b; }
+        .hint { margin: 10px 0 0; color: #5a687d; font-size: .85rem; }
+        @media (max-width: 760px) { form { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 520px) { form { grid-template-columns: 1fr; } header { padding: 20px; } }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🪙 Sistema de Moeda Estudantil</h1>
+    <p>Cadastros de alunos e empresas parceiras — Lab 4.2</p>
+</header>
+<main>
+    <nav aria-label="Tipos de cadastro">
+        <button type="button" data-tab="alunos" aria-selected="true">Alunos</button>
+        <button type="button" data-tab="empresas" aria-selected="false">Empresas parceiras</button>
+    </nav>
+
+    <section id="alunos" class="panel active">
+        <div class="card">
+            <h2 id="aluno-form-title">Cadastrar aluno</h2>
+            <p id="aluno-message" class="message" role="status" aria-live="polite"></p>
+            <form id="aluno-form">
+                <input name="id" type="hidden">
+                <label>Nome
+                    <input name="nome" maxlength="120" required>
+                </label>
+                <label>Email
+                    <input name="email" type="email" maxlength="160" required>
+                </label>
+                <label>CPF
+                    <input name="cpf" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" required>
+                </label>
+                <label>RG
+                    <input name="rg" maxlength="30" required>
+                </label>
+                <label>Endereço
+                    <input name="endereco" maxlength="200" required>
+                </label>
+                <label>Curso
+                    <input name="curso" maxlength="120" required>
+                </label>
+                <label>Instituição
+                    <select name="instituicaoId" required>
+                        <option value="">Carregando instituições...</option>
+                    </select>
+                </label>
+                <label>Login
+                    <input name="login" maxlength="80" required>
+                </label>
+                <label>Senha
+                    <input name="senha" type="password" minlength="8" autocomplete="new-password">
+                </label>
+                <div class="form-actions">
+                    <button class="primary" type="submit">Salvar aluno</button>
+                    <button class="secondary cancel-edit" type="button" hidden>Cancelar edição</button>
+                </div>
+            </form>
+            <p class="hint">A senha deve ter pelo menos 8 caracteres. Na edição, deixe em branco para mantê-la.</p>
+        </div>
+        <div class="card">
+            <h2>Alunos cadastrados</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Nome</th><th>Email</th><th>CPF</th><th>Curso</th><th>Ações</th></tr></thead>
+                    <tbody id="aluno-list"><tr><td colspan="5">Carregando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="empresas" class="panel">
+        <div class="card">
+            <h2 id="empresa-form-title">Cadastrar empresa parceira</h2>
+            <p id="empresa-message" class="message" role="status" aria-live="polite"></p>
+            <form id="empresa-form">
+                <input name="id" type="hidden">
+                <label>Nome / razão social
+                    <input name="nome" maxlength="120" required>
+                </label>
+                <label>Email
+                    <input name="email" type="email" maxlength="160" required>
+                </label>
+                <label>CNPJ
+                    <input name="cnpj" inputmode="numeric" maxlength="18" placeholder="00.000.000/0000-00" required>
+                </label>
+                <label>Login
+                    <input name="login" maxlength="80" required>
+                </label>
+                <label>Senha
+                    <input name="senha" type="password" minlength="8" autocomplete="new-password">
+                </label>
+                <div class="form-actions">
+                    <button class="primary" type="submit">Salvar empresa</button>
+                    <button class="secondary cancel-edit" type="button" hidden>Cancelar edição</button>
+                </div>
+            </form>
+            <p class="hint">A senha deve ter pelo menos 8 caracteres. Na edição, deixe em branco para mantê-la.</p>
+        </div>
+        <div class="card">
+            <h2>Empresas cadastradas</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Nome</th><th>Email</th><th>CNPJ</th><th>Ações</th></tr></thead>
+                    <tbody id="empresa-list"><tr><td colspan="4">Carregando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+<script>
+    const $ = (selector) => document.querySelector(selector);
+    const alunos = { api: "/api/alunos", form: $("#aluno-form"), list: $("#aluno-list"), message: $("#aluno-message") };
+    const empresas = { api: "/api/empresas", form: $("#empresa-form"), list: $("#empresa-list"), message: $("#empresa-message") };
+
+    async function request(url, options = {}) {
+        const response = await fetch(url, {
+            ...options,
+            headers: { "Content-Type": "application/json", ...(options.headers || {}) }
+        });
+        const body = await response.json();
+        if (!response.ok) throw new Error(body.erro || "Não foi possível concluir a solicitação.");
+        return body;
+    }
+
+    function showMessage(resource, text, success = false) {
+        resource.message.textContent = text;
+        resource.message.classList.toggle("success", success);
+    }
+
+    function formValues(form) {
+        const data = Object.fromEntries(new FormData(form).entries());
+        const id = data.id;
+        delete data.id;
+        if (!data.senha) delete data.senha;
+        if ("instituicaoId" in data) data.instituicaoId = Number(data.instituicaoId);
+        return { id, data };
+    }
+
+    function resetForm(resource, title, label) {
+        resource.form.reset();
+        resource.form.elements.id.value = "";
+        resource.form.querySelector(".primary").textContent = label;
+        resource.form.querySelector(".cancel-edit").hidden = true;
+        $(title).textContent = label.replace("Salvar ", "Cadastrar ");
+    }
+
+    function cell(row, value) {
+        const td = document.createElement("td");
+        td.textContent = value ?? "";
+        row.append(td);
+        return td;
+    }
+
+    async function loadAlunos() {
+        try {
+            const data = await request(alunos.api);
+            alunos.list.replaceChildren();
+            if (!data.length) {
+                const row = alunos.list.insertRow();
+                const empty = cell(row, "Nenhum aluno cadastrado.");
+                empty.colSpan = 5;
+                return;
+            }
+            data.forEach((aluno) => {
+                const row = alunos.list.insertRow();
+                cell(row, aluno.nome);
+                cell(row, aluno.email);
+                cell(row, aluno.cpf);
+                cell(row, aluno.curso);
+                const actions = cell(row, "");
+                addActions(actions, () => editarAluno(aluno), () => excluir(alunos, aluno.id, loadAlunos));
+            });
+        } catch (error) {
+            alunos.list.replaceChildren();
+            const row = alunos.list.insertRow();
+            const message = cell(row, error.message);
+            message.colSpan = 5;
+        }
+    }
+
+    async function loadEmpresas() {
+        try {
+            const data = await request(empresas.api);
+            empresas.list.replaceChildren();
+            if (!data.length) {
+                const row = empresas.list.insertRow();
+                const empty = cell(row, "Nenhuma empresa cadastrada.");
+                empty.colSpan = 4;
+                return;
+            }
+            data.forEach((empresa) => {
+                const row = empresas.list.insertRow();
+                cell(row, empresa.nome);
+                cell(row, empresa.email);
+                cell(row, empresa.cnpj);
+                const actions = cell(row, "");
+                addActions(actions, () => editarEmpresa(empresa), () => excluir(empresas, empresa.id, loadEmpresas));
+            });
+        } catch (error) {
+            empresas.list.replaceChildren();
+            const row = empresas.list.insertRow();
+            const message = cell(row, error.message);
+            message.colSpan = 4;
+        }
+    }
+
+    function addActions(cellElement, edit, remove) {
+        const group = document.createElement("div");
+        group.className = "actions";
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.textContent = "Editar";
+        editButton.addEventListener("click", edit);
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "delete";
+        deleteButton.textContent = "Excluir";
+        deleteButton.addEventListener("click", remove);
+        group.append(editButton, deleteButton);
+        cellElement.append(group);
+    }
+
+    function editarAluno(aluno) {
+        for (const [key, value] of Object.entries(aluno)) {
+            if (alunos.form.elements.namedItem(key)) alunos.form.elements.namedItem(key).value = value;
+        }
+        alunos.form.elements.senha.value = "";
+        alunos.form.querySelector(".primary").textContent = "Atualizar aluno";
+        alunos.form.querySelector(".cancel-edit").hidden = false;
+        $("#aluno-form-title").textContent = "Editar aluno";
+        showMessage(alunos, "");
+        alunos.form.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function editarEmpresa(empresa) {
+        for (const [key, value] of Object.entries(empresa)) {
+            if (empresas.form.elements.namedItem(key)) empresas.form.elements.namedItem(key).value = value;
+        }
+        empresas.form.elements.senha.value = "";
+        empresas.form.querySelector(".primary").textContent = "Atualizar empresa";
+        empresas.form.querySelector(".cancel-edit").hidden = false;
+        $("#empresa-form-title").textContent = "Editar empresa parceira";
+        showMessage(empresas, "");
+        empresas.form.scrollIntoView({ behavior: "smooth" });
+    }
+
+    async function excluir(resource, id, reload) {
+        if (!window.confirm("Confirma a exclusão deste cadastro?")) return;
+        try {
+            await request(`${resource.api}/${id}`, { method: "DELETE" });
+            showMessage(resource, "Cadastro excluído.", true);
+            await reload();
+        } catch (error) {
+            showMessage(resource, error.message);
+        }
+    }
+
+    async function submitForm(event, resource, title, label, reload) {
+        event.preventDefault();
+        showMessage(resource, "");
+        const { id, data } = formValues(resource.form);
+        try {
+            await request(id ? `${resource.api}/${id}` : resource.api, {
+                method: id ? "PUT" : "POST",
+                body: JSON.stringify(data)
+            });
+            resetForm(resource, title, label);
+            showMessage(resource, "Cadastro salvo com sucesso.", true);
+            await reload();
+        } catch (error) {
+            showMessage(resource, error.message);
+        }
+    }
+
+    alunos.form.addEventListener("submit", (event) =>
+        submitForm(event, alunos, "#aluno-form-title", "Salvar aluno", loadAlunos));
+    empresas.form.addEventListener("submit", (event) =>
+        submitForm(event, empresas, "#empresa-form-title", "Salvar empresa", loadEmpresas));
+
+    document.querySelectorAll(".cancel-edit").forEach((button) => button.addEventListener("click", () => {
+        if (button.closest("#aluno-form")) resetForm(alunos, "#aluno-form-title", "Salvar aluno");
+        else resetForm(empresas, "#empresa-form-title", "Salvar empresa");
+    }));
+
+    document.querySelectorAll("[data-tab]").forEach((button) => button.addEventListener("click", () => {
+        document.querySelectorAll("[data-tab]").forEach((tab) =>
+            tab.setAttribute("aria-selected", String(tab === button)));
+        document.querySelectorAll(".panel").forEach((panel) =>
+            panel.classList.toggle("active", panel.id === button.dataset.tab));
+    }));
+
+    async function loadInstituicoes() {
+        const select = alunos.form.elements.instituicaoId;
+        try {
+            const institutions = await request("/api/instituicoes");
+            select.replaceChildren(new Option("Selecione", ""));
+            institutions.forEach((institution) => select.add(new Option(institution.nome, institution.id)));
+        } catch (error) {
+            select.replaceChildren(new Option("Erro ao carregar instituições", ""));
+            showMessage(alunos, error.message);
+        }
+    }
+
+    loadInstituicoes();
+    loadAlunos();
+    loadEmpresas();
+</script>
+</body>
+</html>
