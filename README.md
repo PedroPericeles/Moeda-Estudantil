@@ -1,98 +1,162 @@
 # Sistema de Moeda Estudantil
 
-Trabalho desenvolvido para a disciplina de Projeto de Software (Laboratório 3) do curso de Engenharia de Software da PUC Minas.
+Projeto desenvolvido para a disciplina de Projeto de Software (Laboratório 3) do curso de Engenharia de Software da PUC Minas.
 
-## 👥 Integrantes do Grupo
+O sistema busca estimular o mérito estudantil por meio de uma moeda virtual. Professores distribuem moedas aos alunos como reconhecimento; os alunos podem trocá-las por produtos e descontos oferecidos por empresas parceiras.
 
-* **Pedro Augusto Periceles**
-* **Santhiago Takaesu**
+## Integrantes
+
+- **Pedro Augusto Periceles**
+- **Santhiago Takaesu**
 
 **Professora:** Milena Menezes Adão
 
-## 📖 Histórias de Usuário
+## Requisitos do sistema
 
-Abaixo estão descritas as Histórias de Usuário mapeadas para o desenvolvimento do **Sistema de Moeda Estudantil**, estruturadas para orientar o desenvolvimento e validar as entregas.
+### Descrição geral
 
----
+O sistema deve estimular o reconhecimento do mérito estudantil por meio de uma moeda virtual. Professores distribuem moedas aos alunos, que podem trocá-las por produtos e descontos oferecidos por empresas parceiras.
 
-### 👤 Épico 1: Gestão de Usuários e Autenticação
+### Usuários, cadastros e autenticação
 
-**US01 - Cadastro de Aluno**
-> **Como** um aluno que deseja ingressar no sistema de mérito,
-> **Eu quero** realizar um cadastro informando meus dados pessoais e acadêmicos,
-> **Para que** eu possa criar minha conta e participar do programa de reconhecimento.
-* **Critérios de Aceite:**
-  * O formulário deve conter os campos: Nome, Email, CPF, RG, Endereço, Instituição de Ensino e Curso[cite: 1].
-  * As Instituições de Ensino devem vir de uma lista pré-cadastrada[cite: 1].
-  * O sistema não deve permitir o cadastro de CPFs duplicados.
+- **Alunos:** podem se cadastrar informando nome, email, CPF, RG, endereço, instituição de ensino e curso. A instituição deve ser selecionada entre as instituições previamente cadastradas.
+- **Professores:** são pré-cadastrados a partir da lista enviada pela instituição parceira. O cadastro deve conter nome, CPF, departamento e vínculo explícito com a instituição de ensino.
+- **Empresas parceiras:** podem se cadastrar no sistema e oferecer vantagens aos alunos.
+- **Autenticação:** alunos, professores e empresas parceiras devem possuir login e senha. O acesso às funcionalidades deve exigir autenticação.
 
-**US02 - Autenticação no Sistema**
-> **Como** um usuário do sistema (Aluno, Professor ou Empresa Parceira),
-> **Eu quero** fazer login utilizando um email e uma senha cadastrados,
-> **Para que** eu possa acessar minhas funcionalidades com segurança.
-* **Critérios de Aceite:**
-  * O processo de autenticação deve ser obrigatório para acessar as páginas internas[cite: 1].
-  * O sistema deve redirecionar o usuário para o painel correto de acordo com seu perfil (Aluno, Professor ou Empresa).
+### Moedas e transações
 
-**US03 - Cadastro de Empresa Parceira**
-> **Como** uma empresa que deseja realizar parceria,
-> **Eu quero** me cadastrar no sistema,
-> **Para que** eu possa gerenciar minha conta e oferecer vantagens aos estudantes.
-* **Critérios de Aceite:**
-  * A empresa deve criar um login e senha válidos para acesso ao sistema[cite: 1].
+- A cada semestre, cada professor recebe 1.000 moedas.
+- O saldo não distribuído é acumulável: a nova cota semestral deve ser adicionada ao saldo corrente.
+- O professor pode enviar moedas a um aluno, desde que tenha saldo suficiente. Para cada envio, deve informar o montante e uma mensagem aberta e obrigatória com o motivo do reconhecimento.
+- Após o envio, o saldo do professor deve ser debitado e o saldo do aluno creditado. O aluno deve receber uma notificação por email.
+- Alunos e professores podem consultar o saldo e o extrato de suas contas. O extrato do professor deve mostrar as cotas recebidas e os envios; o do aluno, os recebimentos e os resgates.
 
----
+### Vantagens e resgates
 
-### 💰 Épico 2: Gestão de Moedas e Reconhecimento
+- Empresas parceiras podem cadastrar vantagens com descrição, foto do produto e custo em moedas.
+- O aluno pode resgatar uma vantagem quando seu saldo for igual ou superior ao custo. O custo deve ser descontado do saldo no resgate.
+- Para cada resgate, o sistema deve gerar um código de conferência.
+- O aluno deve receber por email um cupom com o código; a empresa parceira deve receber por email os dados da troca e o mesmo código para conferência presencial.
 
-**US04 - Distribuição de Moedas por Mérito**
-> **Como** um professor,
-> **Eu quero** enviar moedas a um aluno selecionado utilizando meu saldo corrente,
-> **Para que** eu possa reconhecer seu bom comportamento ou participação.
-* **Critérios de Aceite:**
-  * O professor deve possuir saldo suficiente para realizar o envio[cite: 1].
-  * É obrigatório o preenchimento de uma mensagem aberta justificando o motivo do reconhecimento[cite: 1].
-  * O saldo do professor deve ser deduzido imediatamente após o envio.
+## Histórias de usuário
 
-**US05 - Notificação de Recebimento de Moedas**
-> **Como** um aluno,
-> **Eu quero** ser notificado por email sempre que um professor me enviar moedas,
-> **Para que** eu saiba imediatamente que fui reconhecido.
-* **Critérios de Aceite:**
-  * O disparo do email deve ser feito automaticamente após a confirmação do envio pelo professor[cite: 1].
+### Gestão de usuários e autenticação
 
-**US06 - Consulta de Extrato da Conta**
-> **Como** um usuário (Aluno ou Professor),
-> **Eu quero** consultar o extrato da minha conta,
-> **Para que** eu possa visualizar meu saldo atual e o histórico de transações.
-* **Critérios de Aceite:**
-  * Para o Professor: o extrato deve mostrar o recebimento semestral (1.000 moedas) e os envios realizados aos alunos[cite: 1].
-  * Para o Aluno: o extrato deve mostrar o recebimento de moedas dos professores e os gastos com troca de vantagens[cite: 1].
+**👤 US01 — Cadastro de aluno**
 
----
+Como aluno que deseja ingressar no sistema de mérito, quero cadastrar meus dados pessoais e acadêmicos para participar do programa de reconhecimento.
 
-### 🛍️ Épico 3: Gestão de Vantagens e Resgates
+Critérios de aceite:
 
-**US07 - Cadastro de Vantagens**
-> **Como** uma empresa parceira,
-> **Eu quero** cadastrar novos produtos ou descontos,
-> **Para que** os alunos possam visualizar e resgatar com suas moedas.
-* **Critérios de Aceite:**
-  * O cadastro deve obrigatoriamente incluir: Nome da vantagem, Descrição, Foto do produto e Custo em moedas[cite: 1].
+- O cadastro solicita nome, email, CPF, RG, endereço, instituição de ensino e curso.
+- O aluno seleciona uma instituição entre as previamente cadastradas.
+- O sistema não permite CPFs duplicados.
 
-**US08 - Resgate de Vantagens**
-> **Como** um aluno,
-> **Eu quero** selecionar e resgatar uma vantagem cadastrada no sistema,
-> **Para que** eu possa trocar minhas moedas acumuladas por um benefício real.
-* **Critérios de Aceite:**
-  * O aluno deve possuir saldo igual ou superior ao custo da vantagem.
-  * Ao confirmar o resgate, o valor deve ser descontado imediatamente do saldo do aluno[cite: 1].
+**US02 — Autenticação**
 
-**US09 - Geração de Cupom e Notificação de Troca**
-> **Como** um aluno ou empresa parceira,
-> **Eu quero** receber um email contendo um código exclusivo logo após o resgate,
-> **Para que** possamos conferir e validar a troca presencialmente.
-* **Critérios de Aceite:**
-  * O sistema deve gerar um código de confirmação único para a transação[cite: 1].
-  * Um email com o cupom e o código deve ser enviado ao aluno[cite: 1].
-  * Um email com os dados do resgate e o código deve ser enviado à empresa parceira para conferência[cite: 1].
+Como aluno, professor ou empresa parceira, quero acessar o sistema com minhas credenciais para utilizar as funcionalidades disponíveis ao meu perfil.
+
+Critérios de aceite:
+
+- Alunos, professores e empresas parceiras têm login e senha.
+- A autenticação é obrigatória para acessar as funcionalidades do sistema.
+- Cada perfil acessa as funcionalidades correspondentes ao seu papel.
+
+**US03 — Cadastro de empresa parceira**
+
+Como empresa interessada em participar do programa, quero me cadastrar no sistema para gerenciar minha conta e oferecer vantagens aos estudantes.
+
+Critérios de aceite:
+
+- A empresa pode realizar seu cadastro e criar credenciais de acesso.
+- A empresa parceira pode cadastrar e gerenciar as vantagens que oferece.
+
+### 💰 Distribuição e consulta de moedas
+
+**US04 — Cadastro prévio de professores**
+
+Como instituição de ensino participante, quero informar os professores vinculados à instituição para que eles possam distribuir moedas aos alunos.
+
+Critérios de aceite:
+
+- As instituições participantes e seus professores são pré-cadastrados no sistema.
+- O cadastro do professor inclui nome, CPF, departamento e vínculo com a instituição.
+
+**US05 — Recebimento semestral de moedas pelo professor**
+
+Como professor, quero receber a cota semestral de moedas para reconhecer o mérito dos meus alunos.
+
+Critérios de aceite:
+
+- O professor recebe 1.000 moedas a cada semestre.
+- Moedas não distribuídas permanecem no saldo; a nova cota é adicionada ao saldo acumulado.
+
+**US06 — Distribuição de moedas por mérito**
+
+Como professor, quero enviar moedas a um aluno e informar o motivo para reconhecer seu bom comportamento, participação ou outro mérito.
+
+Critérios de aceite:
+
+- O professor seleciona o aluno, informa o montante e preenche uma mensagem aberta obrigatória com o motivo.
+- O envio só é realizado quando o professor possui saldo suficiente.
+- O saldo do professor e o do aluno são atualizados após a transação.
+- O aluno recebe uma notificação por email após receber moedas.
+
+**US07 — Consulta de extrato**
+
+Como aluno ou professor, quero consultar meu saldo e minhas transações para acompanhar a movimentação da minha conta.
+
+Critérios de aceite:
+
+- O extrato apresenta o saldo atual e o histórico de transações.
+- Para o professor, apresenta as cotas semestrais recebidas e os envios realizados.
+- Para o aluno, apresenta as moedas recebidas e os resgates realizados.
+
+### 🛍️ Vantagens e resgates
+
+**US08 — Cadastro de vantagens**
+
+Como empresa parceira, quero cadastrar produtos e descontos para que os alunos possam conhecê-los e resgatá-los.
+
+Critérios de aceite:
+
+- Cada vantagem inclui descrição, foto do produto e custo em moedas.
+- A vantagem fica disponível para consulta e resgate pelos alunos.
+
+**US09 — Resgate de vantagem**
+
+Como aluno, quero trocar moedas por uma vantagem cadastrada para obter um produto ou desconto oferecido por uma empresa parceira.
+
+Critérios de aceite:
+
+- O aluno seleciona uma vantagem disponível.
+- O resgate só é concluído quando o aluno possui saldo igual ou superior ao custo.
+- O custo da vantagem é descontado do saldo do aluno após o resgate.
+
+**US10 — Cupom e confirmação do resgate**
+
+Como aluno e empresa parceira, queremos receber os dados do resgate e um código de conferência para validar a troca presencial.
+
+Critérios de aceite:
+
+- O sistema gera um código para identificar o resgate.
+- O aluno recebe por email um cupom com o código.
+- A empresa parceira recebe por email os dados da troca e o mesmo código para conferência.
+
+## Modelagem
+
+Os diagramas produzidos no projeto estão disponíveis em [`Diagramas/`](./Diagramas/):
+
+- [Diagrama de casos de uso](./Diagramas/Diagrama%20Caso%20de%20uso.png)
+- [Diagrama de classes](./Diagramas/Diagrama%20de%20classe.png)
+- [Diagrama de componentes](./Diagramas/Diagrama%20de%20componentes.png)
+- [Modelo entidade-relacionamento](./Diagramas/DiagramaER.png)
+
+## Processo de desenvolvimento
+
+- **Lab03S01:** modelagem do sistema, incluindo diagrama de casos de uso, histórias de usuário, diagrama de classes e diagrama de componentes.
+- **Lab03S02:** elaboração do modelo ER, definição e implementação da estratégia de acesso ao banco de dados e desenvolvimento inicial dos CRUDs de aluno e empresa parceira, com interface e comunicação com o back-end.
+- **Sprint 03:** apresentação do protótipo e de um tutorial sobre as tecnologias escolhidas. Cada apresentação tem duração prevista de 20 minutos.
+
+O sistema deve seguir a arquitetura MVC. Os modelos UML e o código devem ser mantidos atualizados no repositório ao longo das sprints, de modo que a documentação acompanhe a implementação.
