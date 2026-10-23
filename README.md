@@ -1,4 +1,4 @@
-# Sistema de Moeda Estudantil
+# 🪙 Sistema de Moeda Estudantil
 
 Projeto desenvolvido para a disciplina de Projeto de Software (Laboratório 3) do curso de Engenharia de Software da PUC Minas.
 
